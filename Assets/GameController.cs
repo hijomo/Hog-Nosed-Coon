@@ -34,7 +34,7 @@ public class GameController : MonoBehaviour {
     {
       for (int j = 0; j < mapWidth; j++)
       {
-        Vector3 pos = new Vector3(i * 11, 0, j * 11);
+        Vector3 pos = new Vector3(i * 10.5f, 0, j * 10.5f);
         GameObject obj = Instantiate(landPlot, pos, Quaternion.identity);
       }
     }

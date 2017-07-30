@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class landChanger : MonoBehaviour
 {
-  Transform fenceTransform;
+
+  
   GameController gameController;
   public Material forestMaterial;
   public Material clearedLandMaterial;
@@ -12,6 +13,11 @@ public class landChanger : MonoBehaviour
 
   public GameObject land;
   public GameObject fence;
+  Transform fenceTransform;
+  public GameObject tree;
+  Transform treeTransform;
+  public GameObject solarFarm;
+  Transform solarFarmTransform;
 
 
   public float landValue = 100f;
@@ -38,7 +44,10 @@ public class landChanger : MonoBehaviour
     meshRen.material = forestMaterial;
     currentState = state.forest;
     fenceTransform = fence.GetComponent<Transform>();
-  }
+    treeTransform = tree.GetComponent<Transform>();
+    treeTransform.Rotate(Vector3.up, Random.Range(0, 360));
+    solarFarmTransform = solarFarm.GetComponent<Transform>();
+  } 
 
   // Update is called once per frame
   void Update()
@@ -125,11 +134,9 @@ public class landChanger : MonoBehaviour
       {
         return;
       }
-      //add fence
+      fence.SetActive(true);
       currentState = state.owened;
       gameController.ChangeMoney(-landValue);
-      Vector3 newFencePosition = new Vector3(fenceTransform.position.x, fenceTransform.position.y + 0.75f, fenceTransform.position.z);
-      fenceTransform.position = newFencePosition; 
     }
     else if (currentState == state.owened)
     {
@@ -137,6 +144,7 @@ public class landChanger : MonoBehaviour
       {
         return;
       }
+      tree.SetActive(false);
       meshRen.material = clearedLandMaterial;
       currentState = state.cleared;
       gameController.ChangeMoney(-clearingCost);
@@ -148,6 +156,7 @@ public class landChanger : MonoBehaviour
       {
         return;
       }
+      solarFarm.SetActive(true);
       meshRen.material = solarMaterial;
       currentState = state.solar;
       gameController.ChangeMoney(-developmentCost);
