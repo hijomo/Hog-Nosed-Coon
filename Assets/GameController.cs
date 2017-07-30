@@ -6,6 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
+
+  public GameObject landPlot;
+
+  int mapHeight = 10;
+  int mapWidth = 10;
+
+
   public Text demandText, supplyText, moneyText, incomeText, actionText;
   public float demand, supply;
   public float demandGrothRate = 0.5f;
@@ -18,7 +25,14 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+    for (int i = 0; i < mapHeight; i++)
+    {
+      for (int j = 0; j < mapWidth; j++)
+      {
+        Vector3 pos = new Vector3(i * 11, 0, j * 11);
+        GameObject obj = Instantiate(landPlot, pos, Quaternion.identity);
+      }
+    }
 	}
 	
 	// Update is called once per frame
@@ -74,6 +88,7 @@ public class GameController : MonoBehaviour {
   {
     return money;  
   }
+
   public void ChangeMoney(float change)
   {
     money += change;
@@ -81,7 +96,7 @@ public class GameController : MonoBehaviour {
 
   void CheckFailure()
   {
-    if (money <= -1000f)
+    if (money <= 0f)
       SceneManager.LoadScene("GameOverScene");
   }
 

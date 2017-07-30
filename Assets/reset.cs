@@ -14,7 +14,7 @@ public class reset : MonoBehaviour {
 	void Update () {
 		if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
     {
-      SceneManager.LoadScene("Scene01");
+      SceneManager.LoadScene("MainMenu");
     }
 	}
 }
