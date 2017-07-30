@@ -452,6 +452,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4044e4e3e8f58a546a6699829aead1ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 900409237}
+  cameraSpeed: 10
+  cameraMaxX: 40
+  cameraMinX: -20
+  cameraMaxZ: 30
+  cameraMinZ: -30
   landPlot: {fileID: 1048349060871390, guid: 7ef62498b961f0e4db79f6df52116083, type: 2}
   demandText: {fileID: 1913773706}
   supplyText: {fileID: 373433560}

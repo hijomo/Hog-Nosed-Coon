@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
+  public Camera camera;
+  Transform cameraTransform;
+  public float cameraSpeed;
+  public float cameraMaxX, cameraMinX, cameraMaxZ, cameraMinZ;
 
   public GameObject landPlot;
 
@@ -25,6 +29,7 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+    cameraTransform = camera.GetComponent<Transform>();
     for (int i = 0; i < mapHeight; i++)
     {
       for (int j = 0; j < mapWidth; j++)
@@ -37,18 +42,40 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+    float horz = Input.GetAxis("Horizontal");
+    float vert = Input.GetAxis("Vertical");
+    Debug.Log(string.Format("{0} {1}",horz ,vert)); 
+    float newX = ClampFloat(cameraTransform.position.x + horz * cameraSpeed * Time.deltaTime, cameraMinX, cameraMaxX);
+
+    float newZ = ClampFloat(cameraTransform.position.z + vert * cameraSpeed * Time.deltaTime, cameraMinZ, cameraMaxZ);
+    Debug.Log(string.Format("{0} {1} {0}", newX, cameraTransform.position.y, newZ));
+    Vector3 newPos = new Vector3(newX, cameraTransform.position.y, newZ);
+    cameraTransform.position = newPos;
+
     float delta = 0;
-
     demand += demandGrothRate * Time.deltaTime;
-
     delta = supply - demand;
-
     income = delta * energyPrice * Time.deltaTime;
-
     money += income;
     CheckFailure();
     UpdateUI();
 	}
+
+  private float ClampFloat(float value, float min, float max)
+  {
+    if (value <= min)
+    {
+      return min;
+    }
+    else if (value >= max)
+    {
+      return max;
+    }
+    else
+    {
+      return value;
+    }
+  }
 
   private void UpdateUI()
   {
