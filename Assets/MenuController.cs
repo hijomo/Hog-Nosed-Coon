@@ -20,7 +20,16 @@ public class MenuController : MonoBehaviour {
       isStory = false;
       storyPanel.SetActive(false);
     }
-	}
+    if (Input.GetKeyDown(KeyCode.Escape))
+    {
+      ShutDown();
+    }
+  }
+
+  public void ShutDown()
+  {
+    Application.Quit();
+  }
 
   public void PlayButtonClick()
   {

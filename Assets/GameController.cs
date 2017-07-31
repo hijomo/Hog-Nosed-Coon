@@ -76,7 +76,10 @@ public class GameController : MonoBehaviour {
       shutDown = levelTime;
       level++;
     }
-
+    if (Input.GetKeyDown(KeyCode.Escape))
+    {
+      Application.Quit();
+    }
     CheckFailure();
     UpdateUI();
 	}
