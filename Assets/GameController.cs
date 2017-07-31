@@ -13,18 +13,22 @@ public class GameController : MonoBehaviour {
 
   public GameObject landPlot;
 
-  int mapHeight = 10;
-  int mapWidth = 10;
+  int mapHeight = 30;
+  int mapWidth = 30;
 
 
-  public Text demandText, supplyText, moneyText, incomeText, actionText;
+  public Text demandText, supplyText, moneyText, incomeText, actionText, shutDownText;
   public float demand, supply;
   public float demandGrothRate = 0.5f;
   public float energyPrice = 1.5f;
-  public float money; 
+  public float money;
+  float shutDown;
+  float level = 1;
+  public float levelTime ; 
 
   [SerializeField]
   float income;
+
 
 
 	// Use this for initialization
@@ -38,10 +42,12 @@ public class GameController : MonoBehaviour {
         GameObject obj = Instantiate(landPlot, pos, Quaternion.identity);
       }
     }
+    shutDown = levelTime;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+    // move the camera
     float horz = Input.GetAxis("Horizontal");
     float vert = Input.GetAxis("Vertical");
     Debug.Log(string.Format("{0} {1}",horz ,vert)); 
@@ -52,11 +58,25 @@ public class GameController : MonoBehaviour {
     Vector3 newPos = new Vector3(newX, cameraTransform.position.y, newZ);
     cameraTransform.position = newPos;
 
+    // update supply and demand
     float delta = 0;
     demand += demandGrothRate * Time.deltaTime;
     delta = supply - demand;
     income = delta * energyPrice * Time.deltaTime;
     money += income;
+
+    // update the game state
+    if(shutDown > 0)
+    {
+      shutDown -= Time.deltaTime;
+    }
+    else
+    {
+      ChangeSupply(-150f*level);
+      shutDown = levelTime;
+      level++;
+    }
+
     CheckFailure();
     UpdateUI();
 	}
@@ -81,6 +101,14 @@ public class GameController : MonoBehaviour {
   {
     demandText.text = string.Concat("Demand : ", demand.ToString("F0"));
     supplyText.text = string.Concat("Supply : ", supply.ToString("F0"));
+    if (supply - demand - level * 150 < 0)
+    {
+      supplyText.color = Color.yellow;
+    }
+    else
+    {
+      supplyText.color = Color.white;
+    }
     moneyText.text = string.Concat("Money : ", money.ToString("C2"));
     if (money <= 0)
     {
@@ -88,17 +116,18 @@ public class GameController : MonoBehaviour {
     }
     else
     {
-      moneyText.color = Color.black;
+      moneyText.color = Color.white;
     }
     incomeText.text = string.Concat("Income : ", income.ToString("C2"));
     if (income <= 0)
     {
-      incomeText.color = Color.red;
+      incomeText.color = Color.yellow;
     }
     else
     {
-      incomeText.color = Color.black;
+      incomeText.color = Color.white;
     }
+    shutDownText.text = string.Concat("COAL POWER SHUTDOWN IN  ", shutDown.ToString("F0"), "s LOSE ", (150f*level).ToString("F0") , " SUPPLY");
   }
 
   public void ChangeSupply(float change)

@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class reset : MonoBehaviour {
 
+
+  public Text anyKeyText;
+  public float hangTime;
+  float theDrop = 0f;
 	// Use this for initialization
 	void Start () {
 		
@@ -12,9 +18,17 @@ public class reset : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
+    theDrop += Time.deltaTime;
+    if (theDrop > hangTime)
     {
-      SceneManager.LoadScene("MainMenu");
+      if (!anyKeyText.IsActive())
+      {
+        anyKeyText.gameObject.SetActive(true);
+      }
+      if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
+      {
+        SceneManager.LoadScene("MainMenu");
+      }
     }
 	}
 }
